@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import Viewer from "./Viewer";
 import "./App.css";
 
+const PROXY_URL = "https://cadbot.hkrishenning.workers.dev";
+
 const SYSTEM_PROMPT = `You are CadBot, a 3D CAD assistant. Casual, helpful, no markdown.
 
 When the user wants a 3D shape, output ONLY valid JSON:
@@ -14,9 +16,7 @@ For questions or chat, respond in plain text. Keep it short.`;
 
 export default function App() {
   const [prompt, setPrompt] = useState("");
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem("anthropic_api_key") || "");
   const [status, setStatus] = useState("idle");
-  const [showSettings, setShowSettings] = useState(false);
   const [meshData, setMeshData] = useState(null);
   const [workerReady, setWorkerReady] = useState(false);
   const [lastShape, setLastShape] = useState(null);
@@ -37,11 +37,6 @@ export default function App() {
     return () => worker.terminate();
   }, []);
 
-  const saveApiKey = (key) => {
-    setApiKey(key);
-    localStorage.setItem("anthropic_api_key", key);
-  };
-
   const buildShape = (shape) => {
     workerRef.current.postMessage({ shape });
   };
@@ -57,7 +52,6 @@ export default function App() {
   const generate = async () => {
     const text = prompt.trim();
     if (!text) return;
-    if (!apiKey.trim()) { alert("Enter your Anthropic API key in Settings."); return; }
     if (!workerReady) { alert("CAD engine still loading, try again in a moment."); return; }
 
     setStatus("loading");
@@ -68,14 +62,9 @@ export default function App() {
         ? `Current shape: ${JSON.stringify(lastShapeRef.current)}\n\nUser: ${text}`
         : text;
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch(PROXY_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-6",
           max_tokens: 512,
@@ -143,26 +132,6 @@ export default function App() {
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
             </svg>
             <span>CadBot</span>
-          </div>
-
-          <div className="settings-dropdown">
-            <button className="settings-toggle" onClick={() => setShowSettings(s => !s)}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              Settings
-              <span className="chevron">{showSettings ? "▲" : "▼"}</span>
-            </button>
-            {showSettings && (
-              <div className="settings-body">
-                <label>Anthropic API Key</label>
-                <input
-                  type="password"
-                  placeholder="sk-ant-..."
-                  value={apiKey}
-                  onChange={(e) => saveApiKey(e.target.value)}
-                  autoFocus
-                />
-              </div>
-            )}
           </div>
         </div>
 

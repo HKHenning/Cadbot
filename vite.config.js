@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 const wasmContentTypePlugin = {
   name: 'wasm-content-type-plugin',
   configureServer(server) {
@@ -14,7 +16,7 @@ const wasmContentTypePlugin = {
 }
 
 export default defineConfig({
-  plugins: [react(), wasmContentTypePlugin],
+  plugins: [react(), wasmContentTypePlugin, cloudflare()],
   optimizeDeps: {
     exclude: ['replicad-opencascadejs', 'replicad', 'replicad-threejs-helper'],
   },
