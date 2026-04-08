@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Viewer from "./Viewer";
 import "./App.css";
 
-const PROXY_URL = "https://cadbot.hkrishenning.workers.dev";
+const PROXY_URL = "https://cadbot-proxy.hkrishenning.workers.dev";
 
 const SYSTEM_PROMPT = `You are CadBot, a 3D CAD assistant. Casual, helpful, no markdown.
 
