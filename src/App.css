@@ -24,6 +24,52 @@ body {
   overflow-y: auto;
 }
 
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  .app {
+    flex-direction: column-reverse;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-top: 1px solid #e8e8ee;
+    padding: 12px;
+    gap: 10px;
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+
+  .sidebar-top {
+    top: -12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+  }
+
+  .viewport {
+    flex: 1;
+    min-height: 0;
+  }
+
+  textarea {
+    rows: 2;
+    min-height: 52px;
+    resize: none;
+  }
+
+  .params-panel {
+    gap: 10px;
+  }
+
+  .status-bar {
+    margin-top: 0;
+    padding-top: 4px;
+  }
+}
+
 .sidebar-top {
   position: sticky;
   top: -16px;
