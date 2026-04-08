@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vite:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5177)",
+      "Bash(ls -la /c/Users/HKris/CadBot/node_modules/replicad-opencascadejs/src/*.wasm)",
+      "WebSearch",
+      "WebFetch(domain:cadeau.pages.dev)",
+      "WebFetch(domain:studio.replicad.xyz)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm install:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\HKris\\Desktop"
+    ]
+  }
+}
