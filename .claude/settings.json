@@ -11,7 +11,8 @@
       "WebFetch(domain:github.com)",
       "Bash(npm install:*)",
       "Bash(gh repo:*)",
-      "WebFetch(domain:cadbot.hkrishenning.workers.dev)"
+      "WebFetch(domain:cadbot.hkrishenning.workers.dev)",
+      "WebFetch(domain:cadbot.pages.dev)"
     ],
     "additionalDirectories": [
       "C:\\Users\\HKris\\Desktop"
